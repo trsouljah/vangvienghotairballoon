@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import { CircleDot, Plane, ChevronLeft, ChevronRight } from "lucide-react";
+import { CircleDot, Plane, ChevronLeft, ChevronRight, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BookingDialog } from "@/components/BookingDialog";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useSearchParams } from "react-router-dom";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { FAB } from "@/components/mobile/FAB";
@@ -11,6 +12,9 @@ export default function Services() {
   const [selectedService, setSelectedService] = useState("");
   const [balloonImageIndex, setBalloonImageIndex] = useState(0);
   const [paramotorImageIndex, setParamotorImageIndex] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxImages, setLightboxImages] = useState<string[]>([]);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
   const [searchParams] = useSearchParams();
   const isMobile = useIsMobile();
 
@@ -44,6 +48,20 @@ export default function Services() {
   const openBooking = (service: string) => {
     setSelectedService(service);
     setBookingOpen(true);
+  };
+
+  const openLightbox = (images: string[], index: number) => {
+    setLightboxImages(images);
+    setLightboxIndex(index);
+    setLightboxOpen(true);
+  };
+
+  const nextLightboxImage = () => {
+    setLightboxIndex((prev) => (prev + 1) % lightboxImages.length);
+  };
+
+  const prevLightboxImage = () => {
+    setLightboxIndex((prev) => (prev - 1 + lightboxImages.length) % lightboxImages.length);
   };
 
   const nextImage = (
@@ -88,7 +106,8 @@ export default function Services() {
             <img
               src={balloonImages[balloonImageIndex]}
               alt="Hot Air Balloon"
-              className="w-full h-64 md:h-96 object-cover"
+              className="w-full h-64 md:h-96 object-cover cursor-pointer hover:opacity-90 transition-opacity"
+              onClick={() => openLightbox(balloonImages, balloonImageIndex)}
             />
             <button
               onClick={() =>
@@ -160,7 +179,8 @@ export default function Services() {
             <img
               src={paramotorImages[paramotorImageIndex]}
               alt="Paramotor Flight"
-              className="w-full h-64 md:h-96 object-cover"
+              className="w-full h-64 md:h-96 object-cover cursor-pointer hover:opacity-90 transition-opacity"
+              onClick={() => openLightbox(paramotorImages, paramotorImageIndex)}
             />
             <button
               onClick={() =>
@@ -222,6 +242,47 @@ export default function Services() {
         onOpenChange={setBookingOpen}
         serviceType={selectedService}
       />
+
+      {/* Lightbox Dialog */}
+      <Dialog open={lightboxOpen} onOpenChange={setLightboxOpen}>
+        <DialogContent className="max-w-7xl w-full h-[90vh] p-0 bg-black/95 border-none">
+          <button
+            onClick={() => setLightboxOpen(false)}
+            className="absolute top-4 right-4 z-50 text-white hover:text-primary transition-colors"
+          >
+            <X className="h-8 w-8" />
+          </button>
+          
+          <div className="relative w-full h-full flex items-center justify-center">
+            <img
+              src={lightboxImages[lightboxIndex]}
+              alt={`Gallery image ${lightboxIndex + 1}`}
+              className="max-w-full max-h-full object-contain"
+            />
+            
+            {lightboxImages.length > 1 && (
+              <>
+                <button
+                  onClick={prevLightboxImage}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 glass-card p-3 rounded-full hover:bg-white/20 transition-colors"
+                >
+                  <ChevronLeft className="h-8 w-8 text-white" />
+                </button>
+                <button
+                  onClick={nextLightboxImage}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 glass-card p-3 rounded-full hover:bg-white/20 transition-colors"
+                >
+                  <ChevronRight className="h-8 w-8 text-white" />
+                </button>
+                
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 glass-card px-4 py-2 rounded-full text-white text-sm">
+                  {lightboxIndex + 1} / {lightboxImages.length}
+                </div>
+              </>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {isMobile && <FAB onClick={() => setBookingOpen(true)} />}
     </div>

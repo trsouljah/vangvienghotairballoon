@@ -5,7 +5,7 @@ import { BookingDialog } from "@/components/BookingDialog";
 import { useNavigate } from "react-router-dom";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { FAB } from "@/components/mobile/FAB";
-import heroImage from "@/assets/hero-balloon.webp";
+import heroImage from "@/assets/hero-balloon.jpg";
 
 export default function Home() {
   const [bookingOpen, setBookingOpen] = useState(false);

@@ -139,9 +139,7 @@ All colors MUST be HSL.
     left: 0;
     right: 0;
     bottom: 0;
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
+    background: hsl(var(--background));
     z-index: -1;
   }
 

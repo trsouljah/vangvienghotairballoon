@@ -15,9 +15,15 @@ export default function Services() {
   const isMobile = useIsMobile();
 
   const balloonImages = [
-    "https://images.unsplash.com/photo-1498887960847-2a5e46312788",
-    "https://images.unsplash.com/photo-1508672019048-805c876b67e2",
-    "https://images.unsplash.com/photo-1496096265110-f83ad7f96608",
+    new URL("../assets/balloon-1.jpg", import.meta.url).href,
+    new URL("../assets/balloon-2.jpg", import.meta.url).href,
+    new URL("../assets/balloon-3.jpg", import.meta.url).href,
+    new URL("../assets/balloon-4.jpg", import.meta.url).href,
+    new URL("../assets/balloon-5.jpg", import.meta.url).href,
+    new URL("../assets/balloon-6.jpg", import.meta.url).href,
+    new URL("../assets/balloon-7.jpg", import.meta.url).href,
+    new URL("../assets/balloon-8.jpg", import.meta.url).href,
+    new URL("../assets/balloon-9.jpg", import.meta.url).href,
   ];
 
   const paramotorImages = [

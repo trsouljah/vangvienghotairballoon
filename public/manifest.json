@@ -1,0 +1,32 @@
+{
+  "name": "Vangvieng Hot Air Balloon - Professional Mobile App",
+  "short_name": "VV Balloon",
+  "description": "Experience breathtaking hot air balloon and paramotor flights over Vang Vieng, Laos",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#F42B03",
+  "background_color": "#0D0D0D",
+  "categories": ["travel", "tourism", "adventure"],
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

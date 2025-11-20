@@ -1,288 +1,268 @@
 import { useState, useEffect } from "react";
-import { CircleDot, Plane, ChevronLeft, ChevronRight, X } from "lucide-react";
+import { useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { BookingDialog } from "@/components/BookingDialog";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { useSearchParams } from "react-router-dom";
+import { ServiceGallery } from "@/components/ServiceGallery";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { FAB } from "@/components/mobile/FAB";
+import { balloonGallery, paramotorGallery } from "@/lib/gallery-data";
 
 export default function Services() {
-  const [bookingOpen, setBookingOpen] = useState(false);
-  const [selectedService, setSelectedService] = useState("");
-  const [balloonImageIndex, setBalloonImageIndex] = useState(0);
-  const [paramotorImageIndex, setParamotorImageIndex] = useState(0);
-  const [lightboxOpen, setLightboxOpen] = useState(false);
-  const [lightboxImages, setLightboxImages] = useState<string[]>([]);
-  const [lightboxIndex, setLightboxIndex] = useState(0);
   const [searchParams] = useSearchParams();
+  const [bookingOpen, setBookingOpen] = useState(false);
+  const [galleryOpen, setGalleryOpen] = useState(false);
+  const [selectedGallery, setSelectedGallery] = useState<"balloon" | "paramotor">("balloon");
   const isMobile = useIsMobile();
-
-  const balloonImages = [
-    new URL("../assets/balloon-1.jpg", import.meta.url).href,
-    new URL("../assets/balloon-2.jpg", import.meta.url).href,
-    new URL("../assets/balloon-3.jpg", import.meta.url).href,
-    new URL("../assets/balloon-4.jpg", import.meta.url).href,
-    new URL("../assets/balloon-5.jpg", import.meta.url).href,
-    new URL("../assets/balloon-6.jpg", import.meta.url).href,
-    new URL("../assets/balloon-7.jpg", import.meta.url).href,
-    new URL("../assets/balloon-8.jpg", import.meta.url).href,
-    new URL("../assets/balloon-9.jpg", import.meta.url).href,
-  ];
-
-  const paramotorImages = [
-    "https://images.unsplash.com/photo-1502082553048-f009c37129b9",
-    "https://images.unsplash.com/photo-1506012787146-f92b2d7d6d96",
-    "https://images.unsplash.com/photo-1507608869274-d3177c8bb4c7",
-  ];
 
   useEffect(() => {
     const service = searchParams.get("service");
-    if (service === "balloon") {
-      document.getElementById("balloon")?.scrollIntoView({ behavior: "smooth" });
-    } else if (service === "paramotor") {
-      document.getElementById("paramotor")?.scrollIntoView({ behavior: "smooth" });
+    if (service === "balloon" || service === "paramotor") {
+      setSelectedGallery(service);
     }
   }, [searchParams]);
 
-  const openBooking = (service: string) => {
-    setSelectedService(service);
-    setBookingOpen(true);
-  };
-
-  const openLightbox = (images: string[], index: number) => {
-    setLightboxImages(images);
-    setLightboxIndex(index);
-    setLightboxOpen(true);
-  };
-
-  const nextLightboxImage = () => {
-    setLightboxIndex((prev) => (prev + 1) % lightboxImages.length);
-  };
-
-  const prevLightboxImage = () => {
-    setLightboxIndex((prev) => (prev - 1 + lightboxImages.length) % lightboxImages.length);
-  };
-
-  const nextImage = (
-    currentIndex: number,
-    setIndex: (index: number) => void,
-    totalImages: number
-  ) => {
-    setIndex((currentIndex + 1) % totalImages);
-  };
-
-  const prevImage = (
-    currentIndex: number,
-    setIndex: (index: number) => void,
-    totalImages: number
-  ) => {
-    setIndex((currentIndex - 1 + totalImages) % totalImages);
+  const openGallery = (type: "balloon" | "paramotor") => {
+    setSelectedGallery(type);
+    setGalleryOpen(true);
   };
 
   return (
-    <div className="container mx-auto px-4 py-16 md:py-24">
-      <div className="text-center mb-12">
-        <h1 className="text-4xl md:text-5xl font-bold gradient-text mb-4">
-          Our Adventures
-        </h1>
-        <p className="text-lg text-foreground/80 max-w-2xl mx-auto">
-          Choose your perfect aerial experience and create unforgettable memories above Vang Vieng
-        </p>
+    <div className="relative min-h-screen">
+      <div className="container mx-auto px-4 py-16 md:py-24">
+        <div className="text-center mb-16">
+          <h1 className="text-5xl md:text-6xl font-bold gradient-text mb-6">
+            Our Services
+          </h1>
+          <p className="text-xl text-foreground/80 max-w-3xl mx-auto">
+            Experience the magic of Vang Vieng from above with our premium aerial adventures
+          </p>
+        </div>
+
+        {/* Hot Air Balloon Service */}
+        <div className="max-w-6xl mx-auto mb-16">
+          <div className="glass-card p-8 md:p-12 rounded-2xl">
+            <div className="grid md:grid-cols-2 gap-8 items-center">
+              <div>
+                <div className="text-7xl mb-6">🎈</div>
+                <h2 className="text-4xl font-bold gradient-text mb-4">
+                  Hot Air Balloon Trips
+                </h2>
+                <p className="text-lg text-foreground/90 mb-6 leading-relaxed">
+                  Float peacefully above Vang Vieng's stunning limestone karsts, winding rivers, and emerald rice paddies. 
+                  Experience the serenity of sunrise or the golden glow of sunset from a unique perspective.
+                </p>
+
+                <div className="space-y-4 mb-8">
+                  <div className="bg-primary/10 p-4 rounded-lg border border-primary/30">
+                    <h3 className="font-semibold text-primary mb-2">Schedule</h3>
+                    <p className="text-foreground/90">Two shifts available: Sunrise & Sunset</p>
+                  </div>
+                  <div className="bg-primary/10 p-4 rounded-lg border border-primary/30">
+                    <h3 className="font-semibold text-primary mb-2">Duration</h3>
+                    <p className="text-foreground/90">30 to 45 minutes (weather dependent)</p>
+                  </div>
+                  <div className="bg-primary/10 p-4 rounded-lg border border-primary/30">
+                    <h3 className="font-semibold text-primary mb-2">Price</h3>
+                    <p className="text-foreground/90 text-2xl font-bold">$100 per person</p>
+                  </div>
+                </div>
+
+                <div className="flex gap-3">
+                  <Button
+                    size="lg"
+                    className="flex-1 gradient-bg text-white"
+                    onClick={() => setBookingOpen(true)}
+                  >
+                    Book Now
+                  </Button>
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="flex-1 border-primary/50 hover:bg-primary/10"
+                    onClick={() => openGallery("balloon")}
+                  >
+                    View Gallery
+                  </Button>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                {balloonGallery.slice(0, 4).map((image) => (
+                  <div
+                    key={image.id}
+                    className="aspect-square rounded-lg overflow-hidden cursor-pointer hover:scale-105 transition-transform"
+                    onClick={() => openGallery("balloon")}
+                  >
+                    <img
+                      src={image.src}
+                      alt={image.alt}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-8 pt-8 border-t border-white/20">
+              <h3 className="text-2xl font-bold mb-4">What's Included</h3>
+              <ul className="grid md:grid-cols-2 gap-3 text-foreground/90">
+                <li className="flex items-start">
+                  <span className="text-primary mr-2">✓</span>
+                  <span>Pick-up and drop-off from your accommodation</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-primary mr-2">✓</span>
+                  <span>Professional certified pilot</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-primary mr-2">✓</span>
+                  <span>Safety briefing and equipment</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-primary mr-2">✓</span>
+                  <span>Breathtaking aerial views</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-primary mr-2">✓</span>
+                  <span>Photo opportunities</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-primary mr-2">✓</span>
+                  <span>Unforgettable memories</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        {/* Paramotor Service */}
+        <div className="max-w-6xl mx-auto">
+          <div className="glass-card p-8 md:p-12 rounded-2xl">
+            <div className="grid md:grid-cols-2 gap-8 items-center">
+              <div className="order-2 md:order-1 grid grid-cols-2 gap-4">
+                {paramotorGallery.slice(0, 4).map((image) => (
+                  <div
+                    key={image.id}
+                    className="aspect-square rounded-lg overflow-hidden cursor-pointer hover:scale-105 transition-transform"
+                    onClick={() => openGallery("paramotor")}
+                  >
+                    <img
+                      src={image.src}
+                      alt={image.alt}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                ))}
+              </div>
+
+              <div className="order-1 md:order-2">
+                <div className="text-7xl mb-6">🪂</div>
+                <h2 className="text-4xl font-bold gradient-text mb-4">
+                  Paramotor Flights
+                </h2>
+                <p className="text-lg text-foreground/90 mb-6 leading-relaxed">
+                  Feel the adrenaline rush of powered paragliding as you soar through the skies of Vang Vieng. 
+                  Experience the thrill of flight with the freedom and excitement of a paramotor adventure.
+                </p>
+
+                <div className="space-y-4 mb-8">
+                  <div className="bg-primary/10 p-4 rounded-lg border border-primary/30">
+                    <h3 className="font-semibold text-primary mb-2">Schedule</h3>
+                    <p className="text-foreground/90">Available anytime during daylight hours</p>
+                  </div>
+                  <div className="bg-primary/10 p-4 rounded-lg border border-primary/30">
+                    <h3 className="font-semibold text-primary mb-2">Duration</h3>
+                    <p className="text-foreground/90">15 minutes of pure excitement</p>
+                  </div>
+                  <div className="bg-primary/10 p-4 rounded-lg border border-primary/30">
+                    <h3 className="font-semibold text-primary mb-2">Price</h3>
+                    <p className="text-foreground/90 text-2xl font-bold">$80 per person</p>
+                  </div>
+                </div>
+
+                <div className="flex gap-3">
+                  <Button
+                    size="lg"
+                    className="flex-1 gradient-bg text-white"
+                    onClick={() => setBookingOpen(true)}
+                  >
+                    Book Now
+                  </Button>
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="flex-1 border-primary/50 hover:bg-primary/10"
+                    onClick={() => openGallery("paramotor")}
+                  >
+                    View Gallery
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-8 pt-8 border-t border-white/20">
+              <h3 className="text-2xl font-bold mb-4">What's Included</h3>
+              <ul className="grid md:grid-cols-2 gap-3 text-foreground/90">
+                <li className="flex items-start">
+                  <span className="text-primary mr-2">✓</span>
+                  <span>Pick-up and drop-off from your accommodation</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-primary mr-2">✓</span>
+                  <span>Experienced professional pilot</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-primary mr-2">✓</span>
+                  <span>Complete safety equipment</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-primary mr-2">✓</span>
+                  <span>Thrilling aerial experience</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-primary mr-2">✓</span>
+                  <span>Stunning panoramic views</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-primary mr-2">✓</span>
+                  <span>Adventure of a lifetime</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        {/* Important Information */}
+        <div className="max-w-6xl mx-auto mt-16">
+          <div className="glass-card p-8 rounded-2xl">
+            <h2 className="text-3xl font-bold gradient-text mb-6 text-center">
+              Important Information
+            </h2>
+            <div className="grid md:grid-cols-3 gap-6 text-foreground/90">
+              <div>
+                <h3 className="font-semibold text-primary mb-2">Pick-up Service</h3>
+                <p>We pick you up 1 hour before your scheduled flight time from your accommodation.</p>
+              </div>
+              <div>
+                <h3 className="font-semibold text-primary mb-2">Weather Dependent</h3>
+                <p>Flights may be rescheduled due to weather conditions for your safety.</p>
+              </div>
+              <div>
+                <h3 className="font-semibold text-primary mb-2">Payment Options</h3>
+                <p>We accept both LAK (local currency) and USD for your convenience.</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Hot Air Balloon Section */}
-      <section id="balloon" className="mb-16 scroll-mt-20">
-        <div className="glass-card p-6 md:p-10 rounded-2xl">
-          <div className="flex items-center gap-4 mb-6">
-            <div className="w-16 h-16 rounded-full gradient-bg flex items-center justify-center">
-              <CircleDot className="h-8 w-8 text-white" />
-            </div>
-            <h2 className="text-3xl font-bold">Hot Air Balloon Experience</h2>
-          </div>
-
-          {/* Image Gallery */}
-          <div className="relative mb-8 rounded-xl overflow-hidden">
-            <img
-              src={balloonImages[balloonImageIndex]}
-              alt="Hot Air Balloon"
-              className="w-full h-64 md:h-96 object-cover cursor-pointer hover:opacity-90 transition-opacity"
-              onClick={() => openLightbox(balloonImages, balloonImageIndex)}
-            />
-            <button
-              onClick={() =>
-                prevImage(balloonImageIndex, setBalloonImageIndex, balloonImages.length)
-              }
-              className="absolute left-4 top-1/2 -translate-y-1/2 glass-card p-2 rounded-full"
-            >
-              <ChevronLeft className="h-6 w-6" />
-            </button>
-            <button
-              onClick={() =>
-                nextImage(balloonImageIndex, setBalloonImageIndex, balloonImages.length)
-              }
-              className="absolute right-4 top-1/2 -translate-y-1/2 glass-card p-2 rounded-full"
-            >
-              <ChevronRight className="h-6 w-6" />
-            </button>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-6 mb-6">
-            <div>
-              <h3 className="text-xl font-semibold mb-3">Flight Details</h3>
-              <ul className="space-y-2 text-foreground/80">
-                <li>• Shifts: Sunrise (5:30-6:30 AM) & Sunset (4:30-5:30 PM)</li>
-                <li>• Duration: 30-45 minutes</li>
-                <li>• Price: $100 per person</li>
-                <li>• Capacity: 2-6 passengers per balloon</li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="text-xl font-semibold mb-3">What's Included</h3>
-              <ul className="space-y-2 text-foreground/80">
-                <li>• Round-trip transportation</li>
-                <li>• Safety briefing by certified pilots</li>
-                <li>• 30-45 minute balloon flight</li>
-                <li>• Complimentary photos</li>
-                <li>• Post-flight refreshments</li>
-              </ul>
-            </div>
-          </div>
-
-          <p className="text-foreground/80 mb-6">
-            Float gently above Vang Vieng's breathtaking landscape as the sun paints the sky. Our hot air balloon rides offer unparalleled views of limestone karsts, winding rivers, and emerald rice paddies. Each flight is a peaceful journey that will remain in your memory forever.
-          </p>
-
-          <Button
-            size="lg"
-            className="gradient-bg text-white w-full md:w-auto"
-            onClick={() => openBooking("Hot Air Balloon")}
-          >
-            Book Hot Air Balloon
-          </Button>
-        </div>
-      </section>
-
-      {/* Paramotor Section */}
-      <section id="paramotor" className="scroll-mt-20">
-        <div className="glass-card p-6 md:p-10 rounded-2xl">
-          <div className="flex items-center gap-4 mb-6">
-            <div className="w-16 h-16 rounded-full gradient-bg flex items-center justify-center">
-              <Plane className="h-8 w-8 text-white" />
-            </div>
-            <h2 className="text-3xl font-bold">Paramotor Flight</h2>
-          </div>
-
-          {/* Image Gallery */}
-          <div className="relative mb-8 rounded-xl overflow-hidden">
-            <img
-              src={paramotorImages[paramotorImageIndex]}
-              alt="Paramotor Flight"
-              className="w-full h-64 md:h-96 object-cover cursor-pointer hover:opacity-90 transition-opacity"
-              onClick={() => openLightbox(paramotorImages, paramotorImageIndex)}
-            />
-            <button
-              onClick={() =>
-                prevImage(paramotorImageIndex, setParamotorImageIndex, paramotorImages.length)
-              }
-              className="absolute left-4 top-1/2 -translate-y-1/2 glass-card p-2 rounded-full"
-            >
-              <ChevronLeft className="h-6 w-6" />
-            </button>
-            <button
-              onClick={() =>
-                nextImage(paramotorImageIndex, setParamotorImageIndex, paramotorImages.length)
-              }
-              className="absolute right-4 top-1/2 -translate-y-1/2 glass-card p-2 rounded-full"
-            >
-              <ChevronRight className="h-6 w-6" />
-            </button>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-6 mb-6">
-            <div>
-              <h3 className="text-xl font-semibold mb-3">Flight Details</h3>
-              <ul className="space-y-2 text-foreground/80">
-                <li>• Available anytime during daylight hours</li>
-                <li>• Duration: 15 minutes</li>
-                <li>• Price: $80 per person</li>
-                <li>• Individual flights with pilot</li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="text-xl font-semibold mb-3">What's Included</h3>
-              <ul className="space-y-2 text-foreground/80">
-                <li>• Round-trip transportation</li>
-                <li>• Safety briefing and equipment</li>
-                <li>• 15 minute powered flight</li>
-                <li>• Complimentary photos</li>
-                <li>• Post-flight refreshments</li>
-              </ul>
-            </div>
-          </div>
-
-          <p className="text-foreground/80 mb-6">
-            Feel the adrenaline rush of powered paragliding over Vang Vieng's stunning landscapes. Our paramotor flights combine the thrill of flight with spectacular aerial views, offering a unique perspective of the region's natural beauty.
-          </p>
-
-          <Button
-            size="lg"
-            className="gradient-bg text-white w-full md:w-auto"
-            onClick={() => openBooking("Paramotor Flight")}
-          >
-            Book Paramotor Flight
-          </Button>
-        </div>
-      </section>
-
-      <BookingDialog
-        open={bookingOpen}
-        onOpenChange={setBookingOpen}
-        serviceType={selectedService}
+      <BookingDialog open={bookingOpen} onOpenChange={setBookingOpen} />
+      
+      <ServiceGallery
+        images={selectedGallery === "balloon" ? balloonGallery : paramotorGallery}
+        open={galleryOpen}
+        onOpenChange={setGalleryOpen}
       />
-
-      {/* Lightbox Dialog */}
-      <Dialog open={lightboxOpen} onOpenChange={setLightboxOpen}>
-        <DialogContent className="max-w-7xl w-full h-[90vh] p-0 bg-black/95 border-none">
-          <button
-            onClick={() => setLightboxOpen(false)}
-            className="absolute top-4 right-4 z-50 text-white hover:text-primary transition-colors"
-          >
-            <X className="h-8 w-8" />
-          </button>
-          
-          <div className="relative w-full h-full flex items-center justify-center">
-            <img
-              src={lightboxImages[lightboxIndex]}
-              alt={`Gallery image ${lightboxIndex + 1}`}
-              className="max-w-full max-h-full object-contain"
-            />
-            
-            {lightboxImages.length > 1 && (
-              <>
-                <button
-                  onClick={prevLightboxImage}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 glass-card p-3 rounded-full hover:bg-white/20 transition-colors"
-                >
-                  <ChevronLeft className="h-8 w-8 text-white" />
-                </button>
-                <button
-                  onClick={nextLightboxImage}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 glass-card p-3 rounded-full hover:bg-white/20 transition-colors"
-                >
-                  <ChevronRight className="h-8 w-8 text-white" />
-                </button>
-                
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 glass-card px-4 py-2 rounded-full text-white text-sm">
-                  {lightboxIndex + 1} / {lightboxImages.length}
-                </div>
-              </>
-            )}
-          </div>
-        </DialogContent>
-      </Dialog>
 
       {isMobile && <FAB onClick={() => setBookingOpen(true)} />}
     </div>

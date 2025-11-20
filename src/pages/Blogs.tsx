@@ -1,120 +1,195 @@
-import { useState } from "react";
-import { MapPin, Camera, Heart, Sparkles } from "lucide-react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { FAB } from "@/components/mobile/FAB";
+import { useState } from "react";
 import { BookingDialog } from "@/components/BookingDialog";
 
 export default function Blogs() {
-  const [selectedBlog, setSelectedBlog] = useState<number | null>(null);
-  const [bookingOpen, setBookingOpen] = useState(false);
   const isMobile = useIsMobile();
+  const [bookingOpen, setBookingOpen] = useState(false);
 
   const blogs = [
     {
-      icon: MapPin,
+      id: 1,
       title: "Travel Tips for Vang Vieng",
-      excerpt: "Vang Vieng is one of Laos' top adventure destinations. With a bit of preparation, you can enjoy every moment of your trip.",
+      icon: "✈️",
       content: [
-        "🗓️ Best Time to Visit: November to March offers the best weather",
-        "👕 What to Wear: Comfortable clothes, light jacket, walking shoes",
-        "📅 Book One Day in Advance: Sunrise flights sell out quickly",
-        "📱 Bring Only Essentials: Phone, camera, sunglasses",
-        "🗺️ Use Google Maps Offline: Internet coverage may be weak in some areas",
-        "💧 Don't Miss Water Activities: Kayaking, caves, Blue Lagoon",
+        {
+          subtitle: "Best Time to Visit",
+          text: "The ideal time is from November to March when the weather is dry and visibility is perfect for balloon and paramotor flights.",
+        },
+        {
+          subtitle: "What to Wear",
+          text: "Comfortable clothing, a light jacket for early-morning flights, and suitable walking or outdoor shoes.",
+        },
+        {
+          subtitle: "Book Your Activities One Day in Advance",
+          text: "Especially sunrise balloon flights — they are the most popular and sell out quickly.",
+        },
+        {
+          subtitle: "Bring Only the Essentials",
+          text: "Phone, camera, sunglasses. Avoid carrying heavy items during the flight.",
+        },
+        {
+          subtitle: "Use Google Maps Offline",
+          text: "Internet coverage may be weak in some areas outside the town.",
+        },
+        {
+          subtitle: "Don't Miss the Water Activities",
+          text: "Kayaking, caves, and the Blue Lagoon — all worth spending a full day exploring.",
+        },
       ],
     },
     {
-      icon: Camera,
+      id: 2,
       title: "Behind the Scenes of Balloon & Paramotor Flights",
-      excerpt: "Ever wondered what happens before you lift off into the sky? Here's a look behind the scenes.",
+      icon: "🎬",
       content: [
-        "🌤️ Weather Check: Pilots analyze wind speed and direction",
-        "🎈 Preparing Equipment: Inspecting balloon, engine, burner, safety gear",
-        "👥 Passenger Briefing: How to board, sit, land, safety instructions",
-        "📡 Ground Crew: Tracks balloon path, supports landing",
-        "📸 After Landing: Photos, souvenirs, refreshments",
+        {
+          subtitle: "Weather Check",
+          text: "Before every flight, pilots analyze wind speed and direction to ensure safety. If the wind is too strong, the team may delay or reschedule.",
+        },
+        {
+          subtitle: "Preparing the Equipment",
+          text: "Inspecting the balloon and paramotor engine, checking burner flame power and air temperature, preparing the baskets and safety equipment.",
+        },
+        {
+          subtitle: "Passenger Briefing",
+          text: "The crew explains how to board and sit, landing position, and safety instructions during the flight.",
+        },
+        {
+          subtitle: "The Ground Crew",
+          text: "A dedicated team tracks the balloon's path from the ground and arrives at the landing spot to support the pilot and passengers.",
+        },
+        {
+          subtitle: "After Landing",
+          text: "Photos, souvenirs, and a small refreshment to celebrate an unforgettable experience.",
+        },
       ],
     },
     {
-      icon: Heart,
+      id: 3,
       title: "Real Traveler Stories",
-      excerpt: "Hear from travelers who experienced the magic of flying over Vang Vieng.",
+      icon: "💬",
       content: [
-        '🇫🇷 Sarah from France: "Sunrise was magical… couldn\'t stop taking photos! The views of the limestone karsts were absolutely breathtaking."',
-        '🇸🇦 Ahmed from Saudi Arabia: "Best memory of my trip to Laos. The pilot was professional and friendly. Highly recommend!"',
-        '🇰🇷 Lisa from Korea: "Paramotor changed everything! The feeling of freedom is indescribable. Worth every dollar!"',
+        {
+          subtitle: '"My First Time Flying Over the Mountains!" — Sarah from France',
+          text: "Sarah always dreamed of seeing Laos from above. \"Sunrise was magical… I couldn't stop taking photos!\"",
+        },
+        {
+          subtitle: '"Best Memory of My Trip" — Ahmed from Saudi Arabia',
+          text: "Ahmed was nervous at first but decided to try. \"The pilot explained everything — once we lifted off, I felt like I was in another world!\"",
+        },
+        {
+          subtitle: '"Paramotor Changed Everything!" — Lisa from Korea',
+          text: "\"The feeling of freedom in the air is indescribable… I was literally flying over the rice fields!\"",
+        },
+        {
+          subtitle: "What Brings Travelers Together?",
+          text: "The beauty, the excitement, and the unforgettable memories that stay with them forever.",
+        },
       ],
     },
     {
-      icon: Sparkles,
+      id: 4,
       title: "Latest Activities & Adventures in Vang Vieng",
-      excerpt: "Vang Vieng is not only about balloons and paramotors — discover new attractions!",
+      icon: "🌄",
       content: [
-        "🌲 Forest Zipline: Soar through the jungle canopy",
-        "🛶 Cave Tubing: Float through mystical underground rivers",
-        "💎 Blue Lagoon 5: The newest and most stunning lagoon",
-        "🏍️ Mountain ATV Tours: Explore rugged terrain",
-        "🌅 New Sunset Viewpoints: Hidden spots for perfect photos",
+        {
+          subtitle: "Forest Zipline",
+          text: "A fast and fun experience above the trees, perfect for families and adventurers.",
+        },
+        {
+          subtitle: "Cave Tubing",
+          text: "A peaceful yet exciting journey through river caves — one of the most popular activities.",
+        },
+        {
+          subtitle: "Blue Lagoon 5",
+          text: "The newest lagoon with turquoise water and lush green hills.",
+        },
+        {
+          subtitle: "Mountain ATV Tours",
+          text: "An action-packed ride through the hills, mud trails, and scenic viewpoints.",
+        },
+        {
+          subtitle: "New Sunset Viewpoints",
+          text: "Freshly built platforms offering breathtaking sunset views across Vang Vieng.",
+        },
       ],
     },
   ];
 
   return (
-    <div className="container mx-auto px-4 py-16 md:py-24">
-      <div className="text-center mb-12">
-        <h1 className="text-4xl md:text-5xl font-bold gradient-text mb-4">
-          Vangvieng Adventures Blog
-        </h1>
-        <p className="text-lg text-foreground/80 max-w-2xl mx-auto">
-          Welcome to the Vangvieng Hot Air Balloon Blog — your gateway to discovering the magic of adventure from the sky! Here, we share travel tips, behind-the-scenes stories, and the latest activities in the region.
-        </p>
-      </div>
+    <div className="relative min-h-screen">
+      <div className="container mx-auto px-4 py-16 md:py-24">
+        {/* Header */}
+        <div className="text-center mb-16 max-w-4xl mx-auto">
+          <h1 className="text-5xl md:text-6xl font-bold gradient-text mb-6">
+            Our Blog
+          </h1>
+          <p className="text-xl text-foreground/90 leading-relaxed">
+            Welcome to the <strong className="gradient-text">Vangvieng Hot Air Balloon Blog</strong> — your gateway to discovering the magic of adventure from the sky!
+          </p>
+          <p className="text-lg text-foreground/80 mt-4">
+            Here, we share travel tips for Vang Vieng, behind-the-scenes of balloon and paramotor flights, 
+            real stories from travelers, and the latest activities and adventures in the region.
+          </p>
+          <p className="text-lg text-foreground/80 mt-4">
+            Our goal is to help you plan your next trip and explore Vang Vieng from a new perspective — from above the clouds.
+          </p>
+        </div>
 
-      <div className="grid md:grid-cols-2 gap-6 mb-12">
-        {blogs.map((blog, index) => (
-          <div
-            key={index}
-            onClick={() => setSelectedBlog(index)}
-            className="glass-card p-6 rounded-xl cursor-pointer hover:border-primary/50 transition-colors"
-          >
-            <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center mb-4">
-              <blog.icon className="h-6 w-6 text-primary" />
-            </div>
-            <h3 className="text-xl font-bold mb-2">{blog.title}</h3>
-            <p className="text-foreground/70 text-sm">{blog.excerpt}</p>
-          </div>
-        ))}
-      </div>
+        {/* Blog Posts */}
+        <div className="max-w-5xl mx-auto space-y-12">
+          {blogs.map((blog) => (
+            <article key={blog.id} className="glass-card p-8 md:p-12 rounded-2xl">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="text-5xl">{blog.icon}</div>
+                <h2 className="text-3xl md:text-4xl font-bold gradient-text">
+                  {blog.title}
+                </h2>
+              </div>
 
-      <div className="glass-card p-6 rounded-xl border-2 border-primary/30">
-        <h3 className="text-xl font-bold mb-3">✨ Planning Your Visit?</h3>
-        <p className="text-foreground/80">
-          Don't miss the sunrise balloon ride — it's the most popular experience! Book 1-2 days in advance to secure your spot.
-        </p>
-      </div>
-
-      <Dialog open={selectedBlog !== null} onOpenChange={() => setSelectedBlog(null)}>
-        <DialogContent className="glass-card border-2 border-white/20 max-w-2xl max-h-[80vh] overflow-y-auto">
-          {selectedBlog !== null && (
-            <>
-              <DialogHeader>
-                <DialogTitle className="gradient-text text-2xl">
-                  {blogs[selectedBlog].title}
-                </DialogTitle>
-              </DialogHeader>
-
-              <div className="space-y-3 mt-4">
-                {blogs[selectedBlog].content.map((item, index) => (
-                  <p key={index} className="text-foreground/80">
-                    {item}
-                  </p>
+              <div className="space-y-6">
+                {blog.content.map((section, index) => (
+                  <div key={index}>
+                    <h3 className="text-xl font-semibold text-primary mb-2">
+                      {section.subtitle}
+                    </h3>
+                    <p className="text-foreground/90 leading-relaxed">
+                      {section.text}
+                    </p>
+                  </div>
                 ))}
               </div>
-            </>
-          )}
-        </DialogContent>
-      </Dialog>
+            </article>
+          ))}
+        </div>
+
+        {/* Recommended Partner */}
+        <div className="max-w-5xl mx-auto mt-16">
+          <div className="glass-card p-8 md:p-12 rounded-2xl border-2 border-primary/30">
+            <h2 className="text-3xl font-bold gradient-text mb-4 text-center">
+              Recommended Experiences in Vang Vieng
+            </h2>
+            <p className="text-lg text-foreground/90 text-center leading-relaxed">
+              If you are looking for more activities and tours in Vang Vieng, we highly recommend{" "}
+              <strong className="text-primary">Chill Trip Vangvieng Tours</strong>.
+            </p>
+            <p className="text-foreground/80 text-center mt-4">
+              Visit{" "}
+              <a
+                href="https://chilltripvibe.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary hover:underline font-semibold"
+              >
+                chilltripvibe.com
+              </a>{" "}
+              to ensure a safe, professional, and fully organized adventure experience.
+            </p>
+          </div>
+        </div>
+      </div>
 
       <BookingDialog open={bookingOpen} onOpenChange={setBookingOpen} />
       {isMobile && <FAB onClick={() => setBookingOpen(true)} />}

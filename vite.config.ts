@@ -14,11 +14,16 @@ export default defineConfig(({ mode }) => ({
     react(),
     mode === "development" && componentTagger(),
     VitePWA({
-      registerType: "autoUpdate",
-      includeAssets: ["favicon.ico", "icon-*.png", "robots.txt"],
+      registerType: "prompt",
+      includeAssets: ["favicon.ico", "icon-*.png", "robots.txt", "manifest.json"],
       manifest: false,
       workbox: {
+        skipWaiting: true,
+        clientsClaim: true,
+        cleanupOutdatedCaches: true,
         globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2,jpg,webp}"],
+        navigateFallback: "index.html",
+        navigateFallbackDenylist: [/^\/api/, /\.[^/]+$/],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
@@ -45,7 +50,7 @@ export default defineConfig(({ mode }) => ({
         ],
       },
       devOptions: {
-        enabled: true,
+        enabled: false,
       },
     }),
   ].filter(Boolean),

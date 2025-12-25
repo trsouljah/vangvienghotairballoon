@@ -1,10 +1,10 @@
-# Vangvieng Hot Air Balloon
+# Vang Vieng Hot Air Balloon
 
 Experience breathtaking hot air balloon and paramotor flights over Vang Vieng, Laos.
 
 ## About
 
-Vangvieng Hot Air Balloon offers unforgettable aerial adventures with stunning views of Laos' beautiful karst mountains, Nam Song River, and lush green valleys.
+Vang Vieng Hot Air Balloon offers unforgettable aerial adventures with stunning views of Laos' beautiful karst mountains, Nam Song River, and lush green valleys.
 
 ## Services
 

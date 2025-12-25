@@ -64,10 +64,10 @@ export default function Blogs() {
     <div className="container mx-auto px-4 py-16 md:py-24">
       <div className="text-center mb-12">
         <h1 className="text-4xl md:text-5xl font-bold gradient-text mb-4">
-          Vangvieng Adventures Blog
+          Vang Vieng Adventures Blog
         </h1>
         <p className="text-lg text-foreground/80 max-w-2xl mx-auto">
-          Welcome to the Vangvieng Hot Air Balloon Blog — your gateway to discovering the magic of adventure from the sky! Here, we share travel tips, behind-the-scenes stories, and the latest activities in the region.
+          Welcome to the Vang Vieng Hot Air Balloon Blog — your gateway to discovering the magic of adventure from the sky! Here, we share travel tips, behind-the-scenes stories, and the latest activities in the region.
         </p>
       </div>
 

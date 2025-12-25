@@ -48,7 +48,7 @@ export function Header() {
     >
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <Link to="/" className="text-xl font-bold gradient-text">
-          Vangvieng Hot Air Balloon
+          Vang Vieng Hot Air Balloon
         </Link>
 
         {/* Desktop Navigation */}

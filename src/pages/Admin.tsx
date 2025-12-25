@@ -27,7 +27,7 @@ import {
 } from "@/hooks/useSiteContent";
 
 export default function Admin() {
-  const { user, isAdmin, loading, signOut } = useAuth();
+  const { user, isAdmin, loading, adminLoading, signOut } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -37,13 +37,15 @@ export default function Admin() {
   }, [user, loading, navigate]);
 
   useEffect(() => {
-    if (!loading && user && !isAdmin) {
+    // Only redirect if we're done checking both auth and admin status
+    if (!loading && !adminLoading && user && !isAdmin) {
       toast.error("You don't have admin access");
       navigate("/");
     }
-  }, [user, isAdmin, loading, navigate]);
+  }, [user, isAdmin, loading, adminLoading, navigate]);
 
-  if (loading) {
+  // Show loading while checking auth OR admin status
+  if (loading || adminLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />

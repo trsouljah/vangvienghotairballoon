@@ -7,6 +7,7 @@ interface AuthContextType {
   session: Session | null;
   loading: boolean;
   isAdmin: boolean;
+  adminLoading: boolean;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
   signUp: (email: string, password: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
@@ -19,6 +20,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [adminLoading, setAdminLoading] = useState(true);
 
   useEffect(() => {
     // Set up auth state listener FIRST
@@ -30,11 +32,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         // Defer admin check with setTimeout to avoid deadlock
         if (session?.user) {
+          setAdminLoading(true);
           setTimeout(() => {
             checkAdminRole(session.user.id);
           }, 0);
         } else {
           setIsAdmin(false);
+          setAdminLoading(false);
         }
       }
     );
@@ -46,7 +50,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setLoading(false);
       
       if (session?.user) {
+        setAdminLoading(true);
         checkAdminRole(session.user.id);
+      } else {
+        setAdminLoading(false);
       }
     });
 
@@ -65,13 +72,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (error) {
         console.error("Error checking admin role:", error);
         setIsAdmin(false);
+        setAdminLoading(false);
         return;
       }
 
       setIsAdmin(!!data);
+      setAdminLoading(false);
     } catch (error) {
       console.error("Error checking admin role:", error);
       setIsAdmin(false);
+      setAdminLoading(false);
     }
   };
 
@@ -102,7 +112,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, session, loading, isAdmin, signIn, signUp, signOut }}
+      value={{ user, session, loading, isAdmin, adminLoading, signIn, signUp, signOut }}
     >
       {children}
     </AuthContext.Provider>

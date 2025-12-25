@@ -6,6 +6,26 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useSearchParams } from "react-router-dom";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { FAB } from "@/components/mobile/FAB";
+import { useServices, useServiceImages } from "@/hooks/useSiteContent";
+
+// Fallback images in case database has none
+const fallbackBalloonImages = [
+  new URL("../assets/balloon-1.jpg", import.meta.url).href,
+  new URL("../assets/balloon-2.jpg", import.meta.url).href,
+  new URL("../assets/balloon-3.jpg", import.meta.url).href,
+  new URL("../assets/balloon-4.jpg", import.meta.url).href,
+  new URL("../assets/balloon-5.jpg", import.meta.url).href,
+  new URL("../assets/balloon-6.jpg", import.meta.url).href,
+  new URL("../assets/balloon-7.jpg", import.meta.url).href,
+  new URL("../assets/balloon-8.jpg", import.meta.url).href,
+  new URL("../assets/balloon-9.jpg", import.meta.url).href,
+];
+
+const fallbackParamotorImages = [
+  "https://images.unsplash.com/photo-1502082553048-f009c37129b9",
+  "https://images.unsplash.com/photo-1506012787146-f92b2d7d6d96",
+  "https://images.unsplash.com/photo-1507608869274-d3177c8bb4c7",
+];
 
 export default function Services() {
   const [bookingOpen, setBookingOpen] = useState(false);
@@ -18,23 +38,25 @@ export default function Services() {
   const [searchParams] = useSearchParams();
   const isMobile = useIsMobile();
 
-  const balloonImages = [
-    new URL("../assets/balloon-1.jpg", import.meta.url).href,
-    new URL("../assets/balloon-2.jpg", import.meta.url).href,
-    new URL("../assets/balloon-3.jpg", import.meta.url).href,
-    new URL("../assets/balloon-4.jpg", import.meta.url).href,
-    new URL("../assets/balloon-5.jpg", import.meta.url).href,
-    new URL("../assets/balloon-6.jpg", import.meta.url).href,
-    new URL("../assets/balloon-7.jpg", import.meta.url).href,
-    new URL("../assets/balloon-8.jpg", import.meta.url).href,
-    new URL("../assets/balloon-9.jpg", import.meta.url).href,
-  ];
-
-  const paramotorImages = [
-    "https://images.unsplash.com/photo-1502082553048-f009c37129b9",
-    "https://images.unsplash.com/photo-1506012787146-f92b2d7d6d96",
-    "https://images.unsplash.com/photo-1507608869274-d3177c8bb4c7",
-  ];
+  // Fetch services to get their IDs
+  const { data: servicesData } = useServices();
+  
+  // Find balloon and paramotor service IDs
+  const balloonService = servicesData?.find(s => s.service_type === "balloon");
+  const paramotorService = servicesData?.find(s => s.service_type === "paramotor");
+  
+  // Fetch images for each service
+  const { data: balloonDbImages } = useServiceImages(balloonService?.id);
+  const { data: paramotorDbImages } = useServiceImages(paramotorService?.id);
+  
+  // Use database images if available, otherwise fallback to hardcoded
+  const balloonImages = balloonDbImages && balloonDbImages.length > 0 
+    ? balloonDbImages.map(img => img.image_url) 
+    : fallbackBalloonImages;
+    
+  const paramotorImages = paramotorDbImages && paramotorDbImages.length > 0 
+    ? paramotorDbImages.map(img => img.image_url) 
+    : fallbackParamotorImages;
 
   useEffect(() => {
     const service = searchParams.get("service");

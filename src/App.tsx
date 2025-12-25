@@ -8,12 +8,15 @@ import Services from "./pages/Services";
 import Blogs from "./pages/Blogs";
 import FAQs from "./pages/FAQs";
 import Terms from "./pages/Terms";
+import Auth from "./pages/Auth";
+import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 import { Header } from "./components/Header";
 import { Footer } from "./components/Footer";
 import { MobileLayout } from "./components/mobile/MobileLayout";
 import { ScrollToTop } from "./components/ScrollToTop";
 import { useIsMobile } from "./hooks/useIsMobile";
+import { AuthProvider } from "./hooks/useAuth";
 import backgroundImage from "@/assets/background-balloons.jpg";
 
 const queryClient = new QueryClient();
@@ -45,23 +48,27 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <ScrollToTop />
-        <Layout>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/services" element={<Services />} />
-            <Route path="/blogs" element={<Blogs />} />
-            <Route path="/faqs" element={<FAQs />} />
-            <Route path="/terms" element={<Terms />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Layout>
-      </BrowserRouter>
-    </TooltipProvider>
+    <AuthProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <ScrollToTop />
+          <Layout>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/services" element={<Services />} />
+              <Route path="/blogs" element={<Blogs />} />
+              <Route path="/faqs" element={<FAQs />} />
+              <Route path="/terms" element={<Terms />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/admin" element={<Admin />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Layout>
+        </BrowserRouter>
+      </TooltipProvider>
+    </AuthProvider>
   </QueryClientProvider>
 );
 

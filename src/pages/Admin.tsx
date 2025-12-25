@@ -523,6 +523,25 @@ function FeaturesEditor() {
   );
 }
 
+// Fallback images for display in admin
+const fallbackBalloonImages = [
+  new URL("../assets/balloon-1.jpg", import.meta.url).href,
+  new URL("../assets/balloon-2.jpg", import.meta.url).href,
+  new URL("../assets/balloon-3.jpg", import.meta.url).href,
+  new URL("../assets/balloon-4.jpg", import.meta.url).href,
+  new URL("../assets/balloon-5.jpg", import.meta.url).href,
+  new URL("../assets/balloon-6.jpg", import.meta.url).href,
+  new URL("../assets/balloon-7.jpg", import.meta.url).href,
+  new URL("../assets/balloon-8.jpg", import.meta.url).href,
+  new URL("../assets/balloon-9.jpg", import.meta.url).href,
+];
+
+const fallbackParamotorImages = [
+  "https://images.unsplash.com/photo-1502082553048-f009c37129b9",
+  "https://images.unsplash.com/photo-1506012787146-f92b2d7d6d96",
+  "https://images.unsplash.com/photo-1507608869274-d3177c8bb4c7",
+];
+
 function ImagesEditor() {
   const { data: services } = useServices();
   const [selectedServiceId, setSelectedServiceId] = useState<string>("");
@@ -530,6 +549,17 @@ function ImagesEditor() {
   const addImage = useAddServiceImage();
   const deleteImage = useDeleteServiceImage();
   const [uploading, setUploading] = useState(false);
+
+  // Find which service is selected to show appropriate fallbacks
+  const selectedService = services?.find(s => s.id === selectedServiceId);
+  const fallbackImages = selectedService?.service_type === "balloon" 
+    ? fallbackBalloonImages 
+    : selectedService?.service_type === "paramotor" 
+    ? fallbackParamotorImages 
+    : [];
+
+  // Determine if we're showing fallbacks
+  const hasDbImages = images && images.length > 0;
 
   useEffect(() => {
     if (services && services.length > 0 && !selectedServiceId) {
@@ -599,26 +629,44 @@ function ImagesEditor() {
 
         {isLoading ? (
           <Loader2 className="h-6 w-6 animate-spin mx-auto" />
+        ) : hasDbImages ? (
+          <>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {images.map((image) => (
+                <div key={image.id} className="relative group">
+                  <img src={image.image_url} alt="Service" className="w-full h-32 object-cover rounded-lg" />
+                  <Button
+                    size="icon"
+                    variant="destructive"
+                    className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity h-8 w-8"
+                    onClick={() => handleDelete(image.id)}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))}
+            </div>
+          </>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {images?.map((image) => (
-              <div key={image.id} className="relative group">
-                <img src={image.image_url} alt="Service" className="w-full h-32 object-cover rounded-lg" />
-                <Button
-                  size="icon"
-                  variant="destructive"
-                  className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity h-8 w-8"
-                  onClick={() => handleDelete(image.id)}
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {(!images || images.length === 0) && !isLoading && (
-          <p className="text-center text-foreground/70 py-8">No images uploaded yet. Use the upload button above.</p>
+          <>
+            {/* Show fallback images with explanation */}
+            <div className="p-3 bg-orange-500/10 border border-orange-500/30 rounded-lg mb-4">
+              <p className="text-sm text-orange-400">
+                These are default placeholder images from the app code. Upload your own images above to replace them. 
+                Once you upload at least one image, the defaults will be hidden.
+              </p>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {fallbackImages.map((url, index) => (
+                <div key={index} className="relative group opacity-70">
+                  <img src={url} alt={`Default ${index + 1}`} className="w-full h-32 object-cover rounded-lg" />
+                  <div className="absolute inset-0 bg-black/50 flex items-center justify-center rounded-lg">
+                    <span className="text-xs text-white/80">Default</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
         )}
       </CardContent>
     </Card>

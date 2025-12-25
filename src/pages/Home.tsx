@@ -1,18 +1,55 @@
 import { useState } from "react";
-import { CircleDot, Plane, Shield, Clock, Users } from "lucide-react";
+import { CircleDot, Plane, Shield, Clock, Users, Star, Award, Heart, Check, Zap, LucideIcon, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BookingDialog } from "@/components/BookingDialog";
 import { useNavigate } from "react-router-dom";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { FAB } from "@/components/mobile/FAB";
+import { useSiteContent, useServices, useFeatures } from "@/hooks/useSiteContent";
 import heroImage from "@/assets/hero-balloon.jpg";
+
+// Icon mapping for features
+const iconMap: Record<string, LucideIcon> = {
+  Shield,
+  Clock,
+  Users,
+  Star,
+  Award,
+  Heart,
+  Check,
+  Zap,
+};
 
 export default function Home() {
   const [bookingOpen, setBookingOpen] = useState(false);
   const navigate = useNavigate();
   const isMobile = useIsMobile();
 
-  const services = [
+  // Fetch data from database
+  const { data: heroContent, isLoading: heroLoading } = useSiteContent("hero");
+  const { data: servicesData, isLoading: servicesLoading } = useServices();
+  const { data: featuresData, isLoading: featuresLoading } = useFeatures();
+
+  // Parse hero content
+  const heroData = heroContent?.reduce((acc, item) => {
+    acc[item.key] = item.value;
+    return acc;
+  }, {} as Record<string, string>) || {};
+
+  const heroTitle = heroData.title || "Soar Above Vang Vieng";
+  const heroDescription = heroData.description || "Experience breathtaking views from hot air balloons and paramotor flights over the stunning landscapes of Vang Vieng, Laos.";
+
+  // Format services for display
+  const services = servicesData?.slice(0, 2).map((service) => ({
+    icon: service.service_type === "balloon" ? CircleDot : Plane,
+    title: service.title,
+    description: service.description,
+    details: [
+      ...(service.details || []).slice(0, 2),
+      `Price: $${service.price} per person`,
+    ],
+    link: `/services?service=${service.service_type}`,
+  })) || [
     {
       icon: CircleDot,
       title: "Hot Air Balloon Experience",
@@ -37,7 +74,12 @@ export default function Home() {
     },
   ];
 
-  const features = [
+  // Format features for display
+  const features = featuresData?.map((feature) => ({
+    icon: iconMap[feature.icon] || Shield,
+    title: feature.title,
+    description: feature.description,
+  })) || [
     {
       icon: Shield,
       title: "Professional Pilots",
@@ -60,6 +102,8 @@ export default function Home() {
     },
   ];
 
+  const isLoading = heroLoading || servicesLoading || featuresLoading;
+
   return (
     <div className="relative">
       {/* Hero Section */}
@@ -76,12 +120,18 @@ export default function Home() {
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/60" />
 
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
-          <h1 className="text-5xl md:text-7xl font-bold gradient-text animate-float mb-6">
-            Soar Above Vang Vieng
-          </h1>
-          <p className="text-lg md:text-xl text-foreground/90 mb-8 max-w-2xl mx-auto">
-            Experience breathtaking views from hot air balloons and paramotor flights over the stunning landscapes of Vang Vieng, Laos.
-          </p>
+          {isLoading ? (
+            <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto" />
+          ) : (
+            <>
+              <h1 className="text-5xl md:text-7xl font-bold gradient-text animate-float mb-6">
+                {heroTitle}
+              </h1>
+              <p className="text-lg md:text-xl text-foreground/90 mb-8 max-w-2xl mx-auto">
+                {heroDescription}
+              </p>
+            </>
+          )}
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
               size="lg"
